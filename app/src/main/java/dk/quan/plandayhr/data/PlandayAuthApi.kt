@@ -2,7 +2,7 @@ package dk.quan.plandayhr.data
 
 import dk.quan.plandayhr.data.models.Token
 import dk.quan.plandayhr.util.Constants.AUTH_URL
-import dk.quan.plandayhr.util.Constants.BASE_URL
+import dk.quan.plandayhr.util.Constants.BASE_AUTH_URL
 import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -32,7 +32,7 @@ interface PlandayAuthApi {
 
             return Retrofit.Builder()
                 .client(okHttpClient)
-                .baseUrl(BASE_URL)
+                .baseUrl(BASE_AUTH_URL)
                 .addConverterFactory(GsonConverterFactory.create()).build()
                 .create(PlandayAuthApi::class.java)
         }

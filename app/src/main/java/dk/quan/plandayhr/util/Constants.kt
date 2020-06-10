@@ -6,6 +6,7 @@ object Constants {
 
     // Endpoints
     const val BASE_URL = "https://openapi.planday.com/"
+    const val BASE_AUTH_URL = "https://id.planday.com/"
     const val AUTH_URL = "connect/token"
     const val EMPLOYEES_URL = "hr/v1/employees"
     const val EMPLOYEE_URL = "hr/v1/employees/{id}"
