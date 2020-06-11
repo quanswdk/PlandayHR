@@ -21,6 +21,7 @@ class EmployeesFragment : Fragment(), AuthListener, KodeinAware, SwipeRefreshLay
     override val kodein by kodein()
     private val factory: EmployeesViewModelFactory by instance()
     private lateinit var viewModel: EmployeesViewModel
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,6 +34,8 @@ class EmployeesFragment : Fragment(), AuthListener, KodeinAware, SwipeRefreshLay
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this, factory).get(EmployeesViewModel::class.java)
         viewModel.authListener = this
+        swipeRefreshLayout = swipe_container
+        swipeRefreshLayout.setOnRefreshListener(this)
 
 /*
         if (viewModel.isTokenValid()) {
@@ -44,6 +47,7 @@ class EmployeesFragment : Fragment(), AuthListener, KodeinAware, SwipeRefreshLay
     }
 
     override fun onRefresh() {
+        swipeRefreshLayout.isRefreshing = false
         viewModel.authenticate()
     }
 

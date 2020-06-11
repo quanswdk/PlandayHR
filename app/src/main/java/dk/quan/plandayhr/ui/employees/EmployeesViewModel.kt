@@ -24,10 +24,18 @@ class EmployeesViewModel(
     var authListener: AuthListener? = null
 
     fun isTokenValid(): Boolean {
+/*
+        Log.d("carhauge", "TOKEN: " + prefs.get(TOKEN, null))
+        Log.d("carhauge", "TOKEN_EXPIRES_AT: " + prefs.get(
+            TOKEN_EXPIRES_AT,
+            0L
+        ))
+        Log.d("carhauge", "timeInMillis    : " + Calendar.getInstance().timeInMillis)
+*/
         return prefs.get(TOKEN, null) != null && prefs.get(
             TOKEN_EXPIRES_AT,
             0L
-        ) < Calendar.getInstance().timeInMillis
+        ) > Calendar.getInstance().timeInMillis
     }
 
     fun authenticate() {
