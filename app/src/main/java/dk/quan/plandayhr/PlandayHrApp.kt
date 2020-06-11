@@ -3,6 +3,7 @@ package dk.quan.plandayhr
 import android.app.Application
 import dk.quan.plandayhr.data.AuthInterceptor
 import dk.quan.plandayhr.data.NetworkConnectionInterceptor
+import dk.quan.plandayhr.data.PlandayApi
 import dk.quan.plandayhr.data.PlandayAuthApi
 import dk.quan.plandayhr.data.preferences.PreferenceProvider
 import dk.quan.plandayhr.data.repositories.AuthRepository
@@ -24,6 +25,7 @@ class PlandayHrApp() : Application(), KodeinAware {
         bind() from singleton { AuthInterceptor(instance()) }
         bind() from singleton { PlandayAuthApi(instance()) }
         bind() from singleton { AuthRepository(instance()) }
+        bind() from singleton { PlandayApi(instance(), instance()) }
         bind() from provider { EmployeesViewModelFactory(instance(), instance()) }
     }
 }

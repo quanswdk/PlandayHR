@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import dk.quan.plandayhr.R
 import dk.quan.plandayhr.extensions.hide
@@ -36,7 +37,16 @@ class EmployeesFragment : Fragment(), AuthListener, KodeinAware, SwipeRefreshLay
         viewModel.authListener = this
         swipeRefreshLayout = swipe_container
         swipeRefreshLayout.setOnRefreshListener(this)
-
+        recyclerView.apply {
+            layoutManager = LinearLayoutManager(context)
+            setHasFixedSize(true)
+        }
+        val adapter = EmployeesAdapter( object : ClickListeners {
+            override fun onItemClicked(id: Int) {
+                // Navigate to employee fragment read the employee with id
+            }
+        })
+        recyclerView.adapter = adapter
 /*
         if (viewModel.isTokenValid()) {
             // Read the employees from cache or make a network request
