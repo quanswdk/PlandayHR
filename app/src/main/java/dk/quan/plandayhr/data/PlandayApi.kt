@@ -8,14 +8,15 @@ import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface PlandayApi {
 
     @GET("/hr/v1/employees")
-    fun getEmployees(@Query("offset") offset: Int = 0): LiveData<Response<Employees>>
+    suspend fun getEmployees(
+        @Header("X-ClientId") clientId: String,
+        @Query("offset") offset: Int = 0
+    ): Response<Employees>
 
     @GET("/hr/v1/employees/{id}")
     fun getEmployee(@Path("id") id: Int): LiveData<Response<Employee>>

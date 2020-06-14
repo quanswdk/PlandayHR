@@ -7,6 +7,7 @@ import dk.quan.plandayhr.data.PlandayApi
 import dk.quan.plandayhr.data.PlandayAuthApi
 import dk.quan.plandayhr.data.preferences.PreferenceProvider
 import dk.quan.plandayhr.data.repositories.AuthRepository
+import dk.quan.plandayhr.data.repositories.EmployeesRepository
 import dk.quan.plandayhr.ui.employees.EmployeesViewModelFactory
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
@@ -26,6 +27,7 @@ class PlandayHrApp() : Application(), KodeinAware {
         bind() from singleton { PlandayAuthApi(instance()) }
         bind() from singleton { AuthRepository(instance()) }
         bind() from singleton { PlandayApi(instance(), instance()) }
-        bind() from provider { EmployeesViewModelFactory(instance(), instance()) }
+        bind() from singleton { EmployeesRepository(instance()) }
+        bind() from provider { EmployeesViewModelFactory(instance(), instance(), instance()) }
     }
 }
