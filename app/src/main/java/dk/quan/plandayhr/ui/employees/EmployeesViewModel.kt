@@ -2,13 +2,11 @@ package dk.quan.plandayhr.ui.employees
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.DataSource
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
-import dk.quan.plandayhr.data.models.Employee
 import dk.quan.plandayhr.data.models.Employees
 import dk.quan.plandayhr.data.models.EmployeesData
 import dk.quan.plandayhr.data.preferences.PreferenceProvider
@@ -89,17 +87,6 @@ class EmployeesViewModel(
         }
     }
 
-    private fun initializedPagedListBuilder(config: PagedList.Config):
-            LivePagedListBuilder<Int, EmployeesData> {
-
-        val dataSourceFactory = object : DataSource.Factory<Int, EmployeesData>() {
-            override fun create(): DataSource<Int, EmployeesData> {
-                return ItemPositionalDataSource(Dispatchers.IO, employeesRepository)
-            }
-        }
-        return LivePagedListBuilder<Int, EmployeesData>(dataSourceFactory, config)
-    }
-
     private fun initializedPagedListLiveData(): LiveData<PagedList<EmployeesData>> {
 
         val config =
@@ -120,7 +107,6 @@ class EmployeesViewModel(
                 }
             }
         }
-
         return LivePagedListBuilder(dataSource, config).build()
     }
 

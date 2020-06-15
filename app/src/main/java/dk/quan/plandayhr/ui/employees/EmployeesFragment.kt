@@ -76,7 +76,7 @@ class EmployeesFragment : Fragment(), AuthListener, KodeinAware,
         })
 */
         viewModel.employeesPagedListLiveData.observe(viewLifecycleOwner, Observer { employees ->
-            Log.d("carhauge", "employees: $employees.")
+            Log.d("carhauge", "employees: $employees")
             //adapter.submitList(employees)
         })
 /*

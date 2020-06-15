@@ -31,7 +31,10 @@ class ItemPositionalDataSource(
                 response.paging.offset = params.requestedStartPosition
 
                 val count = response.paging.total
-                val data = response.data
+                val data: List<EmployeesData> = response.data
+                //val data = response
+
+                //val employees = response as mutibleListOf()
 
                 callback.onResult(data, params.requestedStartPosition, count)
             } catch (exception: Exception) {
@@ -47,7 +50,8 @@ class ItemPositionalDataSource(
             response.paging.limit = params.loadSize
             response.paging.offset = params.startPosition
 
-            val data = response.data
+            //val data = response
+            val data: List<EmployeesData> = response.data
 
             callback.onResult(data)
         }

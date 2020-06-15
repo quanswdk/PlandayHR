@@ -8,6 +8,7 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import dk.quan.plandayhr.R
+import dk.quan.plandayhr.data.models.Employees
 import dk.quan.plandayhr.data.models.EmployeesData
 import kotlinx.android.synthetic.main.employees_item.view.*
 
