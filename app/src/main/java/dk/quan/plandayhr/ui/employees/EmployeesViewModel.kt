@@ -94,7 +94,7 @@ class EmployeesViewModel(
                 .setEnablePlaceholders(true)
                 .setPrefetchDistance(5)
                 .setInitialLoadSizeHint(50)
-                .setPageSize(5)
+                .setPageSize(50)
                 .build()
 
         val dataSource = object : DataSource.Factory<Int, EmployeesData>() {

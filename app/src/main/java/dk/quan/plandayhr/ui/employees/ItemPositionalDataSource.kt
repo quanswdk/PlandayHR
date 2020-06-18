@@ -2,7 +2,6 @@ package dk.quan.plandayhr.ui.employees
 
 import android.util.Log
 import androidx.paging.PositionalDataSource
-import dk.quan.plandayhr.data.models.Employees
 import dk.quan.plandayhr.data.models.EmployeesData
 import dk.quan.plandayhr.data.repositories.EmployeesRepository
 import kotlinx.coroutines.CoroutineScope
@@ -32,10 +31,6 @@ class ItemPositionalDataSource(
 
                 val count = response.paging.total
                 val data: List<EmployeesData> = response.data
-                //val data = response
-
-                //val employees = response as mutibleListOf()
-
                 callback.onResult(data, params.requestedStartPosition, count)
             } catch (exception: Exception) {
                 Log.e("ItemDataSource", "Failed to fetch data! : " + exception.message)
@@ -50,9 +45,7 @@ class ItemPositionalDataSource(
             response.paging.limit = params.loadSize
             response.paging.offset = params.startPosition
 
-            //val data = response
             val data: List<EmployeesData> = response.data
-
             callback.onResult(data)
         }
     }
