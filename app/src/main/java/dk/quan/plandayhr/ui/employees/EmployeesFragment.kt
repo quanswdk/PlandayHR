@@ -8,10 +8,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import dk.quan.plandayhr.R
+import dk.quan.plandayhr.data.models.EmployeesData
 import dk.quan.plandayhr.extensions.hide
 import dk.quan.plandayhr.extensions.show
 import dk.quan.plandayhr.extensions.showSnackBar
@@ -28,7 +29,7 @@ class EmployeesFragment : Fragment(), AuthListener, KodeinAware,
     private val factory: EmployeesViewModelFactory by instance()
     private lateinit var viewModel: EmployeesViewModel
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
-    private val adapter = EmployeesAdapter()
+    private lateinit var adapter: EmployeesAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,23 +44,7 @@ class EmployeesFragment : Fragment(), AuthListener, KodeinAware,
         viewModel.authListener = this
         swipeRefreshLayout = swipe_container
         swipeRefreshLayout.setOnRefreshListener(this)
-        recyclerView.apply {
-            layoutManager = LinearLayoutManager(context)
-            setHasFixedSize(true)
-        }
-/*
-        ItemClickSupport.addTo(recyclerView).setOnItemClickListener(object :
-            ItemClickSupport.OnItemClickListener {
-            override fun onItemClicked(
-                recyclerView: RecyclerView?,
-                position: Int,
-                v: View?
-            ) {
-                // Navigate to new fragment
-            }
-        })
-*/
-        recyclerView.adapter = adapter
+        initRecyclerView()
         if (viewModel.isTokenValid()) {
             // Read the employees from cache or make a network request
             observeLiveData()
@@ -68,23 +53,25 @@ class EmployeesFragment : Fragment(), AuthListener, KodeinAware,
         }*/
     }
 
-    private fun observeLiveData() {
-        //observe live data emitted by view model
-/*
-        viewModel.getEmployees().observe(viewLifecycleOwner, Observer {
-            adapter.submitList(it)
+    private fun initRecyclerView() {
+        val navController = findNavController()
+        adapter = EmployeesAdapter(object : ClickListeners {
+            override fun onItemClicked(item: EmployeesData) {
+                navController.navigate(R.id.action_employeeEditFragment)
+            }
         })
-*/
+        recyclerView.apply {
+            layoutManager = LinearLayoutManager(requireActivity())
+            setHasFixedSize(true)
+            adapter = this@EmployeesFragment.adapter
+        }
+    }
+
+    private fun observeLiveData() {
         viewModel.employeesPagedListLiveData.observe(viewLifecycleOwner, Observer {
             Log.d("carhauge", "employees: $it")
             adapter.submitList(it)
         })
-/*
-        viewModel.employees.observe(requireActivity(), Observer {
-            Log.d("carhauge", "employees: $it")
-            //adapter.submitList(it)
-        })
-*/
     }
 
     override fun onRefresh() {

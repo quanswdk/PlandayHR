@@ -8,21 +8,14 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import dk.quan.plandayhr.R
-import dk.quan.plandayhr.data.models.Employees
 import dk.quan.plandayhr.data.models.EmployeesData
 import kotlinx.android.synthetic.main.employees_item.view.*
 
 
-class EmployeesAdapter() :
+class EmployeesAdapter(
+    private val clickListeners: ClickListeners
+) :
     PagedListAdapter<EmployeesData, EmployeesAdapter.ViewHolder>(DIFF_CALLBACK) {
-
-/*
-    var employees: List<EmployeesData> = listOf()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
-*/
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -45,6 +38,9 @@ class EmployeesAdapter() :
     inner class ViewHolder(private val binding: ViewDataBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: EmployeesData) {
+            itemView.setOnClickListener {
+                clickListeners.onItemClicked(item)
+            }
             binding.root.firstName.text = item.firstName
             binding.root.lastName.text = item.lastName
         }
@@ -64,5 +60,9 @@ class EmployeesAdapter() :
                 ) = oldItem.equals(newItem)
             }
     }
+}
+
+interface ClickListeners {
+    fun onItemClicked(employee: EmployeesData)
 }
 

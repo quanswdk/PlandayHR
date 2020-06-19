@@ -9,6 +9,19 @@
         android:id="@+id/employeesFragment"
         android:name="dk.quan.plandayhr.ui.employees.EmployeesFragment"
         android:label="Employees"
-        tools:layout="@layout/employees_fragment" />
+        tools:layout="@layout/employees_fragment" >
+        <action
+            android:id="@+id/action_employeeEditFragment"
+            app:destination="@id/employeeEditFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+    <fragment
+        android:id="@+id/employeeEditFragment"
+        android:name="dk.quan.plandayhr.ui.employee.EmployeeEditFragment"
+        android:label="EmployeeEditFragment"
+        tools:layout="@layout/employee_edit_fragment"/>
 
 </navigation>
