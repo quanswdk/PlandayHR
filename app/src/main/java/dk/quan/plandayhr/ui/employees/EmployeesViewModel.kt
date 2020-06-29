@@ -2,18 +2,20 @@ package dk.quan.plandayhr.ui.employees
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.DataSource
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
-import dk.quan.plandayhr.data.models.Employees
+import dk.quan.plandayhr.data.models.EmployeeData
 import dk.quan.plandayhr.data.models.EmployeesData
 import dk.quan.plandayhr.data.preferences.PreferenceProvider
 import dk.quan.plandayhr.data.preferences.PreferenceProvider.Companion.TOKEN
 import dk.quan.plandayhr.data.preferences.PreferenceProvider.Companion.TOKEN_EXPIRES_AT
 import dk.quan.plandayhr.data.repositories.AuthRepository
 import dk.quan.plandayhr.data.repositories.EmployeesRepository
+import dk.quan.plandayhr.ui.PlandayApiListener
 import dk.quan.plandayhr.util.ApiException
 import dk.quan.plandayhr.util.NoInternetException
 import kotlinx.coroutines.Dispatchers
@@ -26,31 +28,19 @@ class EmployeesViewModel(
     private val employeesRepository: EmployeesRepository
 ) : ViewModel() {
 
-    //lateinit var employees :MutableLiveData<PagedList<Employees>>
     val employeesPagedListLiveData = initializedPagedListLiveData()
     private var itemPositionalDataSource: ItemPositionalDataSource? = null
-/*
-    val employees: LiveData<PagedList<Employees>>
-        get() = _employees
-*/
-    //lateinit var employeesLiveData: LiveData<PagedList<EmployeesData>>
+
+    private val _employee = MutableLiveData<EmployeeData>()
+    val employee: LiveData<EmployeeData>
+        get() = _employee
 
     init {
-        if (!isTokenValid()) authenticate() else {
-            //getEmployees()
-/*
-            val pagedListConfig =
-                PagedList.Config.Builder().setEnablePlaceholders(true)
-                    .setPrefetchDistance(5)
-                    .setInitialLoadSizeHint(50)
-                    .setPageSize(5).build()
-            employees = initializedPagedListBuilder(pagedListConfig).build()
-*/
-            //_employees.value = initializedPagedListBuilder(pagedListConfig).build()
-        }
+        if (!isTokenValid()) authenticate()
     }
 
     var authListener: AuthListener? = null
+    var plandayApiListener: PlandayApiListener? = null
 
     fun isTokenValid(): Boolean {
 /*
@@ -68,7 +58,7 @@ class EmployeesViewModel(
     }
 
     fun authenticate() {
-        authListener?.onStarted()
+        authListener?.onAuthStarted()
         viewModelScope.launch {
             try {
                 val token = authRepository.authenticate()
@@ -78,11 +68,26 @@ class EmployeesViewModel(
                     Calendar.getInstance().timeInMillis + (token.expiresIn * 1000)
                 )
                 Log.d("carhauge", "TOKEN_EXPIRES_AT: " + token.expiresIn)
-                authListener?.onSuccess()
+                authListener?.onAuthSuccess()
             } catch (e: ApiException) {
-                e.message?.let { authListener?.onFailure(it) }
+                e.message?.let { authListener?.onAuthFailure(it) }
             } catch (e: NoInternetException) {
-                e.message?.let { authListener?.onFailure(it) }
+                e.message?.let { authListener?.onAuthFailure(it) }
+            }
+        }
+    }
+
+    fun getEmployee(id: Int) {
+        plandayApiListener?.onPlandayApiStarted()
+        viewModelScope.launch {
+            try {
+                val employee = employeesRepository.getEmployee(id)
+                _employee.value = employee.data
+                plandayApiListener?.onPlandayApiSuccess()
+            } catch (e: ApiException) {
+                e.message?.let { plandayApiListener?.onPlandayApiFailure(it) }
+            } catch (e: NoInternetException) {
+                e.message?.let { plandayApiListener?.onPlandayApiFailure(it) }
             }
         }
     }
@@ -109,14 +114,4 @@ class EmployeesViewModel(
         }
         return LivePagedListBuilder(dataSource, config).build()
     }
-
-    //fun getEmployees(): LiveData<PagedList<EmployeesData>> = employeesLiveData
-
-/*
-    fun getEmployees(offset: Int = 0) {
-        viewModelScope.launch(Dispatchers.IO) {
-            employees.postValue(employeesRepository.getEmployees(offset))
-        }
-    }
-*/
 }

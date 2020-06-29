@@ -40,13 +40,17 @@ class ItemPositionalDataSource(
 
     override fun loadRange(params: LoadRangeParams, callback: LoadRangeCallback<EmployeesData>) {
         scope.launch {
-            val response = repo.getEmployees(params.startPosition)
+            try {
+                val response = repo.getEmployees(params.startPosition)
 
-            response.paging.limit = params.loadSize
-            response.paging.offset = params.startPosition
+                response.paging.limit = params.loadSize
+                response.paging.offset = params.startPosition
 
-            val data: List<EmployeesData> = response.data
-            callback.onResult(data)
+                val data: List<EmployeesData> = response.data
+                callback.onResult(data)
+            } catch (exception: Exception) {
+                Log.e("ItemDataSource", "Failed to fetch data! : " + exception.message)
+            }
         }
     }
 }

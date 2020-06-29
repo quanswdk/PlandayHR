@@ -2,7 +2,7 @@ package dk.quan.plandayhr.data.models
 
 import com.google.gson.annotations.SerializedName
 
-data class Employee(
+class EmployeeData(
     @SerializedName("id")
     var id: Int,
     @SerializedName("hiredFrom")
@@ -49,4 +49,9 @@ data class Employee(
     var departments: List<Int>,
     @SerializedName("employeeGroups")
     var employeeGroups: List<Int>
+)
+
+data class Employee(
+    @SerializedName("data")
+    var data: EmployeeData
 )

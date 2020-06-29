@@ -2,6 +2,7 @@ package dk.quan.plandayhr.data.repositories
 
 import dk.quan.plandayhr.data.PlandayApi
 import dk.quan.plandayhr.data.SaveApiRequest
+import dk.quan.plandayhr.data.models.Employee
 import dk.quan.plandayhr.data.models.Employees
 import dk.quan.plandayhr.util.Constants.CLIENT_ID
 
@@ -12,6 +13,12 @@ class EmployeesRepository(
     suspend fun getEmployees(offset: Int): Employees {
         return apiRequest {
             api.getEmployees(CLIENT_ID, offset)
+        }
+    }
+
+    suspend fun getEmployee(id: Int): Employee {
+        return apiRequest {
+            api.getEmployee(CLIENT_ID, id)
         }
     }
 }

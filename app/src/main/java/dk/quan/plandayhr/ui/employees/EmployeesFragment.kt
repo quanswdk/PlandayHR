@@ -48,7 +48,7 @@ class EmployeesFragment : Fragment(), AuthListener, KodeinAware,
         if (viewModel.isTokenValid()) {
             // Read the employees from cache or make a network request
             observeLiveData()
-        } /*else {
+        }/* else {
             viewModel.authenticate()
         }*/
     }
@@ -57,7 +57,8 @@ class EmployeesFragment : Fragment(), AuthListener, KodeinAware,
         val navController = findNavController()
         adapter = EmployeesAdapter(object : ClickListeners {
             override fun onItemClicked(item: EmployeesData) {
-                navController.navigate(R.id.action_employeeEditFragment)
+                val action = EmployeesFragmentDirections.actionEmployeeEditFragment(item.id)
+                navController.navigate(action)
             }
         })
         recyclerView.apply {
@@ -76,18 +77,20 @@ class EmployeesFragment : Fragment(), AuthListener, KodeinAware,
 
     override fun onRefresh() {
         swipeRefreshLayout.isRefreshing = false
-        viewModel.authenticate()
+        //viewModel.authenticate()
     }
 
-    override fun onStarted() {
+    override fun onAuthStarted() {
         progress_bar.show()
     }
 
-    override fun onSuccess() {
+    override fun onAuthSuccess() {
         progress_bar.hide()
+        // Read the employees from cache or make a network request
+        observeLiveData()
     }
 
-    override fun onFailure(message: String) {
+    override fun onAuthFailure(message: String) {
         progress_bar.hide()
         root_layout.showSnackBar(message)
     }
