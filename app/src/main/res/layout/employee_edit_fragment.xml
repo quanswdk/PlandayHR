@@ -9,7 +9,7 @@
             name="viewModel"
             type="dk.quan.plandayhr.ui.employees.EmployeesViewModel" />
 
-        <import type="dk.quan.plandayhr.util.BindingUtils"/>
+        <import type="dk.quan.plandayhr.util.BindingUtils" />
 
     </data>
 
@@ -88,8 +88,8 @@
                         android:id="@+id/gender"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
                         android:checkedButton="@={BindingUtils.genderToButtonId(viewModel.employee.gender)}"
+                        android:orientation="horizontal"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/genderText"
                         app:layout_constraintTop_toTopOf="parent">
@@ -124,12 +124,11 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="22dp"
                     android:background="@color/colorAccent"
+                    android:onClick="@{() -> viewModel.onUpdateButtonClick()}"
                     android:text="Update"
                     android:textAllCaps="false"
                     android:textColor="#fff"
                     android:textSize="18sp" />
-
-                <!--                android:onClick="@{() -> viewmodel.signup()}"-->
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

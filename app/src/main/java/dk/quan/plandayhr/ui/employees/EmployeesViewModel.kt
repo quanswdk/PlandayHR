@@ -92,6 +92,20 @@ class EmployeesViewModel(
         }
     }
 
+    fun onUpdateButtonClick() {
+        plandayApiListener?.onPlandayApiStarted()
+        viewModelScope.launch {
+            try {
+                employeesRepository.putEmployee(employee.value!!.id, employee.value!!)
+                plandayApiListener?.onPlandayApiSuccess()
+            } catch (e: ApiException) {
+                e.message?.let { plandayApiListener?.onPlandayApiFailure(it) }
+            } catch (e: NoInternetException) {
+                e.message?.let { plandayApiListener?.onPlandayApiFailure(it) }
+            }
+        }
+    }
+
     private fun initializedPagedListLiveData(): LiveData<PagedList<EmployeesData>> {
 
         val config =

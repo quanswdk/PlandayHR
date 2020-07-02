@@ -28,4 +28,25 @@ abstract class SaveApiRequest {
             throw ApiException(message.toString())
         }
     }
+
+    suspend fun <T : Any> apiResponse(call: suspend () -> Response<T>) {
+        val response = call.invoke()
+
+        if (response.isSuccessful) {
+            // no body is returned
+        } else {
+            val error = response.errorBody()?.string()
+            val message = StringBuilder()
+            error?.let {
+                try {
+                    message.append(JSONObject(it).getString("message"))
+                } catch (e: JSONException) {
+
+                }
+                message.append("\n")
+            }
+            message.append("Error Code: ${response.code()}")
+            throw ApiException(message.toString())
+        }
+    }
 }
