@@ -31,18 +31,18 @@ class EmployeesAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.apply {
-            getItem(position)?.let { bind(it) }
+            getItem(position)?.let { bind(it, position) }
         }
     }
 
     inner class ViewHolder(private val binding: ViewDataBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: EmployeesData) {
+        fun bind(employee: EmployeesData, position: Int) {
             itemView.setOnClickListener {
-                clickListeners.onItemClicked(item)
+                clickListeners.onItemClicked(employee, position)
             }
-            binding.root.firstName.text = item.firstName
-            binding.root.lastName.text = item.lastName
+            binding.root.firstName.text = employee.firstName
+            binding.root.lastName.text = employee.lastName
         }
     }
 
@@ -63,6 +63,6 @@ class EmployeesAdapter(
 }
 
 interface ClickListeners {
-    fun onItemClicked(employee: EmployeesData)
+    fun onItemClicked(employee: EmployeesData, offset: Int)
 }
 

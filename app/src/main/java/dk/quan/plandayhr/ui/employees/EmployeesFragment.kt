@@ -1,7 +1,6 @@
 package dk.quan.plandayhr.ui.employees
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import dk.quan.plandayhr.R
@@ -56,8 +56,9 @@ class EmployeesFragment : Fragment(), AuthListener, KodeinAware,
     private fun initRecyclerView() {
         val navController = findNavController()
         adapter = EmployeesAdapter(object : ClickListeners {
-            override fun onItemClicked(item: EmployeesData) {
-                val action = EmployeesFragmentDirections.actionEmployeeEditFragment(item.id)
+            override fun onItemClicked(employee: EmployeesData, offset: Int) {
+                val action =
+                    EmployeesFragmentDirections.actionEmployeeEditFragment(employee.id, offset)
                 navController.navigate(action)
             }
         })
@@ -65,19 +66,24 @@ class EmployeesFragment : Fragment(), AuthListener, KodeinAware,
             layoutManager = LinearLayoutManager(requireActivity())
             setHasFixedSize(true)
             adapter = this@EmployeesFragment.adapter
+            addItemDecoration(
+                DividerItemDecoration(
+                    requireContext(),
+                    DividerItemDecoration.VERTICAL
+                )
+            )
         }
     }
 
     private fun observeLiveData() {
         viewModel.employeesPagedListLiveData.observe(viewLifecycleOwner, Observer {
-            Log.d("carhauge", "employees: $it")
             adapter.submitList(it)
         })
     }
 
     override fun onRefresh() {
+        viewModel.invalidateEmployees()
         swipeRefreshLayout.isRefreshing = false
-        //viewModel.authenticate()
     }
 
     override fun onAuthStarted() {

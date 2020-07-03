@@ -77,6 +77,21 @@ class EmployeesViewModel(
         }
     }
 
+    fun getEmployees(offset: Int) {
+        viewModelScope.launch {
+            try {
+                val employees = employeesRepository.getEmployees(offset)
+                invalidateEmployees()
+            } catch (exception: Exception) {
+                Log.e("getEmployees", "Failed to fetch data! : " + exception.message)
+            }
+        }
+    }
+
+    fun invalidateEmployees() {
+        itemPositionalDataSource?.invalidate()
+    }
+
     fun getEmployee(id: Int) {
         plandayApiListener?.onPlandayApiStarted()
         viewModelScope.launch {
